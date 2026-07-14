@@ -19,3 +19,22 @@ venv/
 # OS files
 .DS_Store
 Thumbs.db
+
+# IDE (if not everyone's on VS Code)
+.idea/
+
+# Frontend (if Nikshith goes custom React instead of Streamlit)
+node_modules/
+frontend/build/
+frontend/dist/
+
+# Jupyter (likely for NLP/extraction experimentation)
+.ipynb_checkpoints/
+
+# Neo4j extras (if using Docker with more than just data volume)
+neo4j-logs/
+neo4j-import/
+
+# Model/cache files (spaCy models, embedding caches, downloaded transformers)
+*.bin
+.cache/
