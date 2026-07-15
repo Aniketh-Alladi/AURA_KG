@@ -1,40 +1,46 @@
-# Neo4j
-neo4j-data/
+# Neo4j Data & Volumes
+**/neo4j-data/
+**/neo4j-logs/
+**/neo4j-import/
 
-# Environment variables
-.env
-backend/.env
+# Environment variables (catches root and all subdirectories)
+**/.env
+*.env
 
-# Python
+# Python compilation and caches
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.cache/
 
 # Virtual environments
 .venv/
 venv/
+ENV/
 
-# VS Code
+# VS Code & IDEs
 .vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
 
 # OS files
 .DS_Store
 Thumbs.db
 
-# IDE (if not everyone's on VS Code)
-.idea/
-
-# Frontend (if Nikshith goes custom React instead of Streamlit)
-node_modules/
+# Frontend dependencies and builds
+**/node_modules/
 frontend/build/
 frontend/dist/
 
-# Jupyter (likely for NLP/extraction experimentation)
+# Jupyter Notebooks
 .ipynb_checkpoints/
 
-# Neo4j extras (if using Docker with more than just data volume)
-neo4j-logs/
-neo4j-import/
-
-# Model/cache files (spaCy models, embedding caches, downloaded transformers)
+# Model/Large Binary Cache files
 *.bin
-.cache/
+*.pkl
+*.h5

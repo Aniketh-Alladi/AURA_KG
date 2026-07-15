@@ -9,6 +9,9 @@ services:
 
     environment:
       NEO4J_AUTH: neo4j/password123
+      # Tell Neo4j to listen to external traffic on HTTP and Bolt protocols:
+      NEO4J_server_default__listen__address: 0.0.0.0
+      NEO4J_server_http_listen__address: 0.0.0.0:7474
 
     volumes:
       - ./neo4j-data:/data
