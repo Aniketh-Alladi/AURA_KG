@@ -63,6 +63,12 @@
 // Outcome
 // ├── outcome_id (Unique)
 // └── description
+//
+// Deliverable
+// ├── deliverable_id (Unique)
+// ├── name
+// ├── type
+// └── status
 
 
 // ============================================================================
@@ -95,6 +101,9 @@
 
 // A phase has a milestone/deadline.
 (:Phase)-[:HAS_DEADLINE]->(:Milestone)
+
+// A project produces deliverables.
+(:Project)-[:HAS_DELIVERABLE]->(:Deliverable)
 
 
 // ---------------------------------------------------------------------------
@@ -131,6 +140,13 @@
 // A dataset is used during a project phase.
 (:Dataset)-[:USED_IN]->(:Phase)
 
+// ============================================================================
+// DELIVERABLE
+// ============================================================================
+
+CREATE CONSTRAINT deliverable_id_unique IF NOT EXISTS
+FOR (dl:Deliverable)
+REQUIRE dl.deliverable_id IS UNIQUE;
 
 // ============================================================================
 // End of AURA-KG V1 Graph Schema

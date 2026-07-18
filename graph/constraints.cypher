@@ -99,6 +99,14 @@ CREATE CONSTRAINT outcome_id_unique IF NOT EXISTS
 FOR (o:Outcome)
 REQUIRE o.outcome_id IS UNIQUE;
 
+// ============================================================================
+// DELIVERABLE
+// ============================================================================
+
+CREATE CONSTRAINT deliverable_id_unique IF NOT EXISTS
+FOR (dl:Deliverable)
+REQUIRE dl.deliverable_id IS UNIQUE;
+
 
 // ============================================================================
 // End of AURA-KG V1 Constraints
