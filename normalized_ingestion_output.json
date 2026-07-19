@@ -1,0 +1,132 @@
+[
+  {
+    "source_type": "note",
+    "source_path": "dummy_data\\notes\\notes_01.md",
+    "raw_text": "Title: AURA-KG Sprint Notes — Week 3\n\nMet with Varun and Tejus today to discuss the ingestion pipeline.\nVarun is handling the Gmail API connector for AURA-KG's data pipeline.\nWe're targeting Neo4j as the graph database, using Cypher for queries.\n\nDecided the Phase 2 deadline is August 15th — need the extraction\npipeline working by then. Aniketh is exploring FAISS for the vector\nsearch layer, part of the retrieval feature.\n\nRisk flagged: entity extraction accuracy with spaCy's small model\nmight not be good enough — may need to upgrade to a transformer model.",
+    "metadata": {
+      "title": "Notes 01",
+      "author": null,
+      "date": null
+    }
+  },
+  {
+    "source_type": "note",
+    "source_path": "dummy_data\\notes\\notes_02.md",
+    "raw_text": "# File: notes_architecture_sync.md\nTitle: Architecture Sync & Component Mapping\nDate: July 20, 2026\n\nSat down with Tejus to diagram the core NLP & graph construction phase. We confirmed that Tejus is stepping into the Lead Ontologist role for the project to ensure the schema holds up. \n\nKey architectural decisions:\n- We are officially committing to Neo4j as the graph database. Cypher will be our primary query language.\n- For the retrieval feature, Aniketh is owning the LLM & retrieval layer. He is currently benchmarking FAISS against LanceDB to handle the vector search layer.\n- The immediate deliverable is a functional prototype with an example query session, which needs to be ready before we scale out.\n\nRisk: Tejus noted that spaCy's small model might struggle with custom technical entities. We might need to swap it out for a fine-tuned Transformer model if edge extraction accuracy drops below 80%.",
+    "metadata": {
+      "title": "Notes 02",
+      "author": null,
+      "date": null
+    }
+  },
+  {
+    "source_type": "note",
+    "source_path": "dummy_data\\notes\\notes_03.md",
+    "raw_text": "# File: notes_ingestion_blockers.md\nTitle: Ingestion Pipeline & Auth Blockers\nDate: July 22, 2026\n\nQuick sync with Varun regarding the data pipeline & ingestion setup. Varun is currently acting as the Pipeline Engineer. \n\nStatus update:\n- He's writing the Python scripts to pull data from the Google Workspace APIs.\n- The Gmail API connector is mostly unblocked, but OAuth scopes are proving annoying. \n- The ultimate outcome we need from this pipeline is automated document syncing so the graph updates in near real-time.\n- Varun is worried that if the pipeline is too slow, we won't hit the upcoming frontend phase milestone on July 30th. He's going to map the pipeline dependencies to a strict milestone chart by Friday.",
+    "metadata": {
+      "title": "Notes 03",
+      "author": null,
+      "date": null
+    }
+  },
+  {
+    "source_type": "note",
+    "source_path": "dummy_data\\notes\\notes_04.md",
+    "raw_text": "# File: notes_ui_ux_review.md\nTitle: UI/UX & Visualization Brainstorm\nDate: July 23, 2026\n\nNikshith walked the team through the initial mockups for the graph explorer feature. As our Frontend & visualization owner, Nikshith has been grinding on Cytoscape.js.\n\nNotes:\n- The network visualization looks clean, but performance chokes if we try to render more than 50 nodes simultaneously.\n- One major learning outcome: we absolutely need to implement node clustering by Domain (e.g., grouping all personal knowledge management concepts together) to keep the UI readable.\n- Next tool up is Streamlit to wrap the entire query UI. Nikshith wants to start binding real Neo4j Cypher outputs to the UI by early next week.",
+    "metadata": {
+      "title": "Notes 04",
+      "author": null,
+      "date": null
+    }
+  },
+  {
+    "source_type": "note",
+    "source_path": "dummy_data\\notes\\notes_05.md",
+    "raw_text": "# File: notes_evaluation_metrics.md\nTitle: Evaluation Metrics & RAG Triad\nDate: July 24, 2026\n\nAniketh shared his research on evaluating the LLM & retrieval system. Since his role centers on Retrieval Quality, he's setting up a standalone evaluation dataset.\n\nDetails:\n- He is using Ragas alongside FAISS to test faithfulness and answer relevance.\n- This evaluation framework is a critical deliverable for Phase 1. \n- Met with Varun to ensure the evaluation text chunks map cleanly back to the original source documents parsed by the Python ingestion script. If the source metadata is lost in the graph database, debugging bad retrievals will be impossible.",
+    "metadata": {
+      "title": "Notes 05",
+      "author": null,
+      "date": null
+    }
+  },
+  {
+    "source_type": "email",
+    "source_path": "dummy_data\\emails\\email_01.txt",
+    "raw_text": "Hey team,\n\nCytoscape.js integration is done for the graph explorer feature.\nStreamlit query UI is next — targeting the July 30th milestone\nfor AURA-KG's frontend phase.\n\nOne learning outcome from this week: figuring out how to keep\nforce-directed graphs readable with more than 50 nodes is genuinely\nhard. Might need clustering.\n\n— Nikshith",
+    "metadata": {
+      "title": "Frontend milestone update",
+      "author": "nikshith@aurakg.dev",
+      "date": null
+    }
+  },
+  {
+    "source_type": "email",
+    "source_path": "dummy_data\\emails\\email_02.txt",
+    "raw_text": "Hey everyone,\n\nQuick update on the ingestion pipeline. I've successfully written a Python script that parses our markdown notes and formats them for the graph database. \n\nI successfully ran a test script inserting nodes directly into our Neo4j instance. The extraction pipeline is successfully mapping the 'Person' node to the 'Role' node, but I'm having trouble linking the 'Tool' node (like spaCy) to specific 'Features'. \n\nTejus - can we look at the Cypher entity-matching logic tomorrow? I want to make sure we don't create duplicate nodes when we import the email archives next week.\n\nBest,\nVarun\nData pipeline & ingestion",
+    "metadata": {
+      "title": "Data Pipeline Status & Graph Ingestion Sample",
+      "author": "varun@aurakg.dev",
+      "date": null
+    }
+  },
+  {
+    "source_type": "email",
+    "source_path": "dummy_data\\emails\\email_03.txt",
+    "raw_text": "Hey team,\n\nGood news: the Cytoscape.js integration is fully locked in for the graph explorer feature. \n\nBad news: I am officially starting the Streamlit query UI work, but I'm blocked until Aniketh exposes the retrieval feature API. Right now, the UI has nothing to query. \n\nReminder that our next major milestone for AURA-KG's frontend phase is locked in for July 30th. If I don't get the API endpoint by Tuesday, we risk slipping past that target date. Aniketh, let me know when we can sync on the JSON schema.\n\n— Nikshith\nFrontend & visualization",
+    "metadata": {
+      "title": "Frontend milestone update & Streamlit blocking",
+      "author": "nikshith@aurakg.dev",
+      "date": null
+    }
+  },
+  {
+    "source_type": "email",
+    "source_path": "dummy_data\\emails\\email_04.txt",
+    "raw_text": "Hi Aniketh,\n\nFollowing up on the risk flagged in our architecture sync. I ran a test run of our applied NLP pipeline using spaCy's small model on our initial pilot dataset. \n\nAs feared, entity extraction accuracy is hitting a wall. It completely missed \"FAISS\" as a Tool and classified \"Phase 2\" as a Person. I'm going to transition us to a Hugging Face Transformer model (specifically a fine-tuned RoBERTa variant) over the weekend. \n\nThis model upgrade is now a prerequisite for our Phase 2 deadline on August 15th. We cannot build a clean personal knowledge management graph if the baseline extraction is noisy.\n\nRegards,\nTejus\nNLP & graph construction",
+    "metadata": {
+      "title": "NLP Extraction Pipeline - Model Upgrade Needed",
+      "author": "tejus@aurakg.dev",
+      "date": null
+    }
+  },
+  {
+    "source_type": "document",
+    "source_path": "dummy_data\\documents\\doc_01.txt",
+    "raw_text": "Project Charter: AURA-KG\n\nDomain: Personal knowledge management / applied NLP\nDeliverable: functional prototype with example query session\n\nTeam:\n- Varun — Data pipeline & ingestion\n- Tejus — NLP & graph construction\n- Aniketh — LLM & retrieval\n- Nikshith — Frontend & visualization\n\nTools in use: Python, Neo4j, spaCy, Transformers, FAISS, Streamlit, Cytoscape.js",
+    "metadata": {
+      "title": "Doc 01",
+      "author": null,
+      "date": null
+    }
+  },
+  {
+    "source_type": "document",
+    "source_path": "dummy_data\\documents\\doc_02.txt",
+    "raw_text": "PROJECT CHARTER: PROJECT AURA-KG\nSystem Overview & Scope Document\n\n1. OVERVIEW & DOMAIN\nProject AURA-KG is an internal initiative dedicated to the domain of Personal knowledge management and applied NLP. The goal is to turn unstructured team communications (emails, chats, notes) into a queryable knowledge graph.\n\n2. CORE TEAM & ROLES\n- Varun: Data pipeline & ingestion\n- Tejus: NLP & graph construction\n- Aniketh: LLM & retrieval\n- Nikshith: Frontend & visualization\n\n3. TECHNOLOGY STACK (TOOLS IN USE)\nThe platform is built on the following stack: Python, Neo4j, spaCy, Transformers, FAISS, Streamlit, and Cytoscape.js. \n\n4. PRIMARY OUTCOME\nThe ultimate outcome of this project is to eliminate institutional developer amnesia by allowing team members to query historical technical decisions through a natural language interface.",
+    "metadata": {
+      "title": "Doc 02",
+      "author": null,
+      "date": null
+    }
+  },
+  {
+    "source_type": "document",
+    "source_path": "dummy_data\\documents\\doc_03.txt",
+    "raw_text": "AURA-KG WORK PLAN: PHASING AND MILESTONES\nDocument Ref: WP-2026-V1\n\nThis document outlines the active phases, milestones, and deliverables required to hit our product launch.\n\nPhase 1: Ingestion & Core Extraction (Current)\n- Deliverable: Functional prototype with example query session.\n- Milestone: Core Pipeline Verification. Target Date: July 30th.\n- Status: Varun and Tejus are actively integrating Python parsing with the graph database.\n\nPhase 2: Advanced Retrieval & UI Integration\n- Deliverable: Multi-hop graph retrieval API.\n- Milestone: End-to-End System Integration. Target Date: August 15th.\n- Status: Dependent on Aniketh completing the vector search layer using FAISS and Nikshith finishing the Streamlit interface.\n\nFailure to meet the July 30th milestone will directly compress the timeline for the August 15th deadline.",
+    "metadata": {
+      "title": "Doc 03",
+      "author": null,
+      "date": null
+    }
+  },
+  {
+    "source_type": "document",
+    "source_path": "dummy_data\\documents\\doc_04.txt",
+    "raw_text": "TECHNICAL SPECIFICATION: EXTRACTION TARGETS\nDocument Version: 1.0.4\n\nTo validate the AURA-KG schema, the extraction pipeline must successfully identify and link the following target entities across all unstructured text:\n\n- Core Entities: Person (e.g., Varun, Aniketh), Role (e.g., Lead Ontologist), Tool (e.g., Neo4j, Cypher, Cytoscape.js).\n- Contextual Entities: Domain (e.g., applied NLP), Project (AURA-KG), Feature (e.g., graph explorer feature, retrieval feature).\n- Temporal Entities: Phase (e.g., Phase 1, frontend phase), Milestone (e.g., July 30th milestone).\n- Value Entities: Outcome (e.g., node clustering benefits), Deliverable (e.g., functional prototype).\n\nSuccess Criteria: The pipeline must demonstrate entity resolution—meaning \"Neo4j as our DB\" in a casual note must resolve to the exact same node ID as \"Neo4j\" in this Project Charter.",
+    "metadata": {
+      "title": "Doc 04",
+      "author": null,
+      "date": null
+    }
+  }
+]
