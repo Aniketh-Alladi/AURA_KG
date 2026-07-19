@@ -1,0 +1,11 @@
+TECHNICAL SPECIFICATION: EXTRACTION TARGETS
+Document Version: 1.0.4
+
+To validate the AURA-KG schema, the extraction pipeline must successfully identify and link the following target entities across all unstructured text:
+
+- Core Entities: Person (e.g., Varun, Aniketh), Role (e.g., Lead Ontologist), Tool (e.g., Neo4j, Cypher, Cytoscape.js).
+- Contextual Entities: Domain (e.g., applied NLP), Project (AURA-KG), Feature (e.g., graph explorer feature, retrieval feature).
+- Temporal Entities: Phase (e.g., Phase 1, frontend phase), Milestone (e.g., July 30th milestone).
+- Value Entities: Outcome (e.g., node clustering benefits), Deliverable (e.g., functional prototype).
+
+Success Criteria: The pipeline must demonstrate entity resolution—meaning "Neo4j as our DB" in a casual note must resolve to the exact same node ID as "Neo4j" in this Project Charter.

@@ -1,0 +1,14 @@
+From: nikshith@aurakg.dev
+To: team@aurakg.dev
+Subject: Frontend milestone update & Streamlit blocking
+
+Hey team,
+
+Good news: the Cytoscape.js integration is fully locked in for the graph explorer feature. 
+
+Bad news: I am officially starting the Streamlit query UI work, but I'm blocked until Aniketh exposes the retrieval feature API. Right now, the UI has nothing to query. 
+
+Reminder that our next major milestone for AURA-KG's frontend phase is locked in for July 30th. If I don't get the API endpoint by Tuesday, we risk slipping past that target date. Aniketh, let me know when we can sync on the JSON schema.
+
+— Nikshith
+Frontend & visualization

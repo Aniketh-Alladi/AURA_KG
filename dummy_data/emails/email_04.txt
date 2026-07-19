@@ -1,0 +1,16 @@
+From: tejus@aurakg.dev
+To: aniketh@aurakg.dev
+Cc: team@aurakg.dev
+Subject: NLP Extraction Pipeline - Model Upgrade Needed
+
+Hi Aniketh,
+
+Following up on the risk flagged in our architecture sync. I ran a test run of our applied NLP pipeline using spaCy's small model on our initial pilot dataset. 
+
+As feared, entity extraction accuracy is hitting a wall. It completely missed "FAISS" as a Tool and classified "Phase 2" as a Person. I'm going to transition us to a Hugging Face Transformer model (specifically a fine-tuned RoBERTa variant) over the weekend. 
+
+This model upgrade is now a prerequisite for our Phase 2 deadline on August 15th. We cannot build a clean personal knowledge management graph if the baseline extraction is noisy.
+
+Regards,
+Tejus
+NLP & graph construction

@@ -1,0 +1,15 @@
+From: varun@aurakg.dev
+To: team@aurakg.dev
+Subject: Data Pipeline Status & Graph Ingestion Sample
+
+Hey everyone,
+
+Quick update on the ingestion pipeline. I've successfully written a Python script that parses our markdown notes and formats them for the graph database. 
+
+I successfully ran a test script inserting nodes directly into our Neo4j instance. The extraction pipeline is successfully mapping the 'Person' node to the 'Role' node, but I'm having trouble linking the 'Tool' node (like spaCy) to specific 'Features'. 
+
+Tejus - can we look at the Cypher entity-matching logic tomorrow? I want to make sure we don't create duplicate nodes when we import the email archives next week.
+
+Best,
+Varun
+Data pipeline & ingestion

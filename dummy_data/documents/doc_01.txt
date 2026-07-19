@@ -1,0 +1,12 @@
+Project Charter: AURA-KG
+
+Domain: Personal knowledge management / applied NLP
+Deliverable: functional prototype with example query session
+
+Team:
+- Varun — Data pipeline & ingestion
+- Tejus — NLP & graph construction
+- Aniketh — LLM & retrieval
+- Nikshith — Frontend & visualization
+
+Tools in use: Python, Neo4j, spaCy, Transformers, FAISS, Streamlit, Cytoscape.js

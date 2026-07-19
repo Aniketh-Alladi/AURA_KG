@@ -1,0 +1,15 @@
+From: nikshith@aurakg.dev
+To: team@aurakg.dev
+Subject: Frontend milestone update
+
+Hey team,
+
+Cytoscape.js integration is done for the graph explorer feature.
+Streamlit query UI is next — targeting the July 30th milestone
+for AURA-KG's frontend phase.
+
+One learning outcome from this week: figuring out how to keep
+force-directed graphs readable with more than 50 nodes is genuinely
+hard. Might need clustering.
+
+— Nikshith

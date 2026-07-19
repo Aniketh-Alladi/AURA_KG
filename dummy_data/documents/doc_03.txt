@@ -1,0 +1,16 @@
+AURA-KG WORK PLAN: PHASING AND MILESTONES
+Document Ref: WP-2026-V1
+
+This document outlines the active phases, milestones, and deliverables required to hit our product launch.
+
+Phase 1: Ingestion & Core Extraction (Current)
+- Deliverable: Functional prototype with example query session.
+- Milestone: Core Pipeline Verification. Target Date: July 30th.
+- Status: Varun and Tejus are actively integrating Python parsing with the graph database.
+
+Phase 2: Advanced Retrieval & UI Integration
+- Deliverable: Multi-hop graph retrieval API.
+- Milestone: End-to-End System Integration. Target Date: August 15th.
+- Status: Dependent on Aniketh completing the vector search layer using FAISS and Nikshith finishing the Streamlit interface.
+
+Failure to meet the July 30th milestone will directly compress the timeline for the August 15th deadline.

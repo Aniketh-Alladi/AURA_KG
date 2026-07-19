@@ -1,0 +1,17 @@
+PROJECT CHARTER: PROJECT AURA-KG
+System Overview & Scope Document
+
+1. OVERVIEW & DOMAIN
+Project AURA-KG is an internal initiative dedicated to the domain of Personal knowledge management and applied NLP. The goal is to turn unstructured team communications (emails, chats, notes) into a queryable knowledge graph.
+
+2. CORE TEAM & ROLES
+- Varun: Data pipeline & ingestion
+- Tejus: NLP & graph construction
+- Aniketh: LLM & retrieval
+- Nikshith: Frontend & visualization
+
+3. TECHNOLOGY STACK (TOOLS IN USE)
+The platform is built on the following stack: Python, Neo4j, spaCy, Transformers, FAISS, Streamlit, and Cytoscape.js. 
+
+4. PRIMARY OUTCOME
+The ultimate outcome of this project is to eliminate institutional developer amnesia by allowing team members to query historical technical decisions through a natural language interface.
