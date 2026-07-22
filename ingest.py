@@ -1,9 +1,13 @@
 import os
 import json
 import re
+import sys
 from datetime import datetime
 from pathlib import Path
 from email import message_from_string
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 # Try importing python-frontmatter, fallback to manual if not installed yet
 try:
@@ -25,6 +29,7 @@ class AuraIngestor:
     def parse_note(self, content: str, file_path: Path) -> dict:
         """Parses Markdown notes, extracting YAML frontmatter or falling back to file names."""
         title, author, date_str = None, None, None
+        raw_text = content
         
         if frontmatter:
             try:
@@ -58,9 +63,12 @@ class AuraIngestor:
             title = file_path.stem.replace('_', ' ').replace('-', ' ').title()
 
         return {
-            "title": title,
-            "author": author,
-            "date": date_str
+            "metadata": {
+                "title": title,
+                "author": author,
+                "date": date_str
+            },
+            "body": raw_text
         }
 
     def parse_email(self, content: str) -> dict:
@@ -74,15 +82,25 @@ class AuraIngestor:
         
         # Handle cases where email doesn't strictly adhere to standard header format
         if not author and not title and "From:" in content:
-            # Simple manual fallback parsing
             lines = content.split('\n')
             for line in lines[:10]: # Look at top lines
                 if line.startswith('From:'): author = line.replace('From:', '').strip()
                 elif line.startswith('Subject:'): title = line.replace('Subject:', '').strip()
                 elif line.startswith('Date:'): date_raw = line.replace('Date:', '').strip()
         
-        # Clean up fallback body if standard parsing returned empty
-        body = msg.get_payload() if msg.is_multipart() is False else content
+        # Extract clean body text
+        if msg.is_multipart():
+            body_parts = []
+            for part in msg.walk():
+                if part.get_content_type() == "text/plain":
+                    payload = part.get_payload(decode=True)
+                    if payload:
+                        body_parts.append(payload.decode('utf-8', errors='ignore'))
+            body = "\n".join(body_parts) if body_parts else content
+        else:
+            payload = msg.get_payload()
+            body = payload if isinstance(payload, str) else content
+
         if not msg.keys() and "Subject:" in content:
             body = content.split('\n\n', 1)[-1] if '\n\n' in content else content
 
@@ -98,9 +116,12 @@ class AuraIngestor:
     def parse_document(self, content: str, file_path: Path) -> dict:
         """Parses standard plain text documents."""
         return {
-            "title": file_path.stem.replace('_', ' ').replace('-', ' ').title(),
-            "author": None,
-            "date": None
+            "metadata": {
+                "title": file_path.stem.replace('_', ' ').replace('-', ' ').title(),
+                "author": None,
+                "date": None
+            },
+            "body": content
         }
 
     def process_file(self, file_path: Path, source_type: str) -> dict:
@@ -108,28 +129,26 @@ class AuraIngestor:
         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read()
 
-        metadata = {"title": None, "author": None, "date": None}
-        raw_text = content
-
         if source_type == 'note':
-            metadata = self.parse_note(content, file_path)
-            # Re-read or isolate text if using frontmatter
-            if frontmatter and content.startswith('---'):
-                raw_text = frontmatter.loads(content).content
-            elif content.startswith('---') and len(content.split('---', 2)) >= 3:
-                raw_text = content.split('---', 2)[2]
-                
+            parsed = self.parse_note(content, file_path)
         elif source_type == 'email':
-            email_data = self.parse_email(content)
-            metadata = email_data["metadata"]
-            raw_text = email_data["body"]
-            
+            parsed = self.parse_email(content)
         elif source_type == 'document':
-            metadata = self.parse_document(content, file_path)
+            parsed = self.parse_document(content, file_path)
+        else:
+            parsed = {"metadata": {"title": None, "author": None, "date": None}, "body": content}
+
+        metadata = parsed["metadata"]
+        raw_text = parsed["body"]
+
+        try:
+            rel_path = str(file_path.relative_to(self.data_dir.parent))
+        except ValueError:
+            rel_path = str(file_path)
 
         return {
             "source_type": source_type,
-            "source_path": str(file_path.relative_to(self.data_dir.parent)),
+            "source_path": rel_path,
             "raw_text": self.normalize_text(raw_text),
             "metadata": metadata
         }
