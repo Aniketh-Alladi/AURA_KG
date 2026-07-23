@@ -102,3 +102,12 @@ ON (o.description);
 // ============================================================================
 // End of AURA-KG V1 Indexes
 // ============================================================================
+
+CREATE VECTOR INDEX node_embedding_idx IF NOT EXISTS
+FOR (n:Entity) ON (n.embedding)
+OPTIONS {
+  indexConfig: {
+    `vector.dimensions`: 1536,
+    `vector.similarity_function`: 'cosine'
+  }
+};

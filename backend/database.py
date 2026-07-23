@@ -4,12 +4,14 @@ Handles connection lifecycle, sessions, and transaction execution using official
 """
 
 import logging
-from typing import Any, Dict, List, Optional
-from neo4j import GraphDatabase, Driver, ManagedTransaction
+from contextlib import contextmanager
+from typing import Any, Dict, List, Optional, Generator
+from neo4j import GraphDatabase, Driver, ManagedTransaction, Session
 
 from backend.config import Config
 
 logger = logging.getLogger(__name__)
+
 
 class Neo4jDatabase:
     """Thread-safe manager for Neo4j database driver connection and execution."""
@@ -22,10 +24,10 @@ class Neo4jDatabase:
         database: Optional[str] = None
     ) -> None:
         """Initialize Neo4j database configuration."""
-        self.uri = uri or Config.NEO4J_URI
-        self.user = user or Config.NEO4J_USER
-        self.password = password or Config.NEO4J_PASSWORD
-        self.database = database or Config.NEO4J_DATABASE
+        self.uri = uri or getattr(Config, "NEO4J_URI", "neo4j://localhost:7687")
+        self.user = user or getattr(Config, "NEO4J_USER", "neo4j")
+        self.password = password or getattr(Config, "NEO4J_PASSWORD", "password")
+        self.database = database or getattr(Config, "NEO4J_DATABASE", "neo4j")
         self._driver: Optional[Driver] = None
 
     def connect(self) -> Driver:
@@ -84,9 +86,31 @@ class Neo4jDatabase:
         with driver.session(database=self.database) as session:
             return session.execute_read(_work)
 
+    def get_session(self) -> Session:
+        """Helper to obtain a direct session instance."""
+        driver = self.connect()
+        return driver.session(database=self.database)
+
     def __enter__(self):
         self.connect()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
+
+
+# Instantiate a default singleton instance for module-level convenience
+db = Neo4jDatabase()
+
+
+@contextmanager
+def get_session() -> Generator[Session, None, None]:
+    """
+    Module-level context manager for yielding a database session.
+    Maintains compatibility with direct `with get_session() as session:` calls across the backend.
+    """
+    session = db.get_session()
+    try:
+        yield session
+    finally:
+        session.close()
