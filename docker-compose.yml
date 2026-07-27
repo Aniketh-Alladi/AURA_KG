@@ -1,20 +1,50 @@
-services:
-  neo4j:
-    image: neo4j:5.26
-    container_name: aura-kg-neo4j
+version: '3.8'
 
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aura-kg-frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - RETRIEVAL_API_URL=${RETRIEVAL_API_URL:-http://backend:8000/api/retrieve}
+      - GRAPH_API_URL=${GRAPH_API_URL:-http://backend:8000/api/graph}
+      - NEO4J_URI=${NEO4J_URI:-bolt://neo4j:7687}
+      - NEO4J_USER=${NEO4J_USER:-neo4j}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD:-password}
+      - LLM_MODEL=${LLM_MODEL:-gpt-3.5-turbo}
+      - LLM_TEMPERATURE=${LLM_TEMPERATURE:-0.7}
+    volumes:
+      - ./frontend/static:/app/static
+      - ./frontend/components:/app/components
+    restart: unless-stopped
+    networks:
+      - aura-kg-network
+
+  neo4j:
+    image: neo4j:5-enterprise
+    container_name: aura-kg-neo4j
     ports:
       - "7474:7474"
       - "7687:7687"
-
     environment:
-      NEO4J_AUTH: neo4j/password123
-      # Tell Neo4j to listen to external traffic on HTTP and Bolt protocols:
-      NEO4J_server_default__listen__address: 0.0.0.0
-      NEO4J_server_http_listen__address: 0.0.0.0:7474
-
+      - NEO4J_AUTH=${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-password}
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_dbms_memory_pagecache_size=1G
+      - NEO4J_dbms_memory_heap_max__size=1G
     volumes:
-      - ./neo4j-data:/data
-      - ./graph:/import
-
+      - neo4j-data:/data
+      - neo4j-logs:/logs
     restart: unless-stopped
+    networks:
+      - aura-kg-network
+
+networks:
+  aura-kg-network:
+    driver: bridge
+
+volumes:
+  neo4j-data:
+  neo4j-logs:
