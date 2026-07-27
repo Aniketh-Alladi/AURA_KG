@@ -1,0 +1,35 @@
+.main-header {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2E4053;
+    margin-bottom: 1rem;
+}
+.sub-header {
+    font-size: 1.2rem;
+    color: #5D6D7E;
+    margin-bottom: 2rem;
+}
+.query-box {
+    background-color: #F4F6F7;
+    padding: 2rem;
+    border-radius: 10px;
+    margin: 1rem 0;
+}
+.answer-box {
+    background-color: #E8F8F5;
+    padding: 1.5rem;
+    border-radius: 10px;
+    border-left: 4px solid #1ABC9C;
+    margin: 1rem 0;
+}
+.node-person { background: #3498DB; }
+.node-role { background: #2ECC71; }
+.node-project { background: #E74C3C; }
+.node-domain { background: #F39C12; }
+.node-tool { background: #9B59B6; }
+.node-feature { background: #1ABC9C; }
+.node-phase { background: #E67E22; }
+.node-milestone { background: #2C3E50; }
+.node-outcome { background: #27AE60; }
+.node-deliverable { background: #2980B9; }
+.node-dataset { background: #8E44AD; }
