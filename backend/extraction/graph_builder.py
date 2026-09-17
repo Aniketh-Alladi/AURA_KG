@@ -32,9 +32,11 @@ class GraphBuilder:
         pk_val = node_data["pk_val"]
         props = node_data.get("properties", {})
 
-        # Cypher MERGE query template
+        # Cypher MERGE query template. Every domain node also carries the generic
+        # `:Entity` label, which the retrieval/embedding subsystem (embedder.py,
+        # retriever.py, graph/indexes.cypher's vector index) matches against.
         cypher = f"""
-        MERGE (n:`{label}` {{ `{pk_field}`: $pk_val }})
+        MERGE (n:`{label}`:Entity {{ `{pk_field}`: $pk_val }})
         ON CREATE SET n += $props
         ON MATCH SET n += $props
         RETURN n.`{pk_field}` AS id
