@@ -14,6 +14,8 @@ def vector_and_subgraph_search(
     Executes a hybrid Cypher query that performs a vector similarity search 
     and immediately traverses 1-hop relationships outward.
     """
+    # Domain nodes use per-label primary keys (person_id, project_id, ...), not a
+    # generic `id` property, so elementId() is used as the stable node reference.
     cypher = """
     CALL db.index.vector.queryNodes('node_embedding_idx', $top_k, $query_vector)
     YIELD node, score
@@ -21,8 +23,8 @@ def vector_and_subgraph_search(
     OPTIONAL MATCH (node)-[r]-(neighbor)
     WHERE neighbor IS NOT NULL
 
-    RETURN 
-        node.id AS anchor_id,
+    RETURN
+        elementId(node) AS anchor_id,
         coalesce(node.name, node.title, '') AS anchor_name,
         coalesce(node.description, node.summary, '') AS anchor_desc,
         [label IN labels(node) WHERE label <> 'Entity'][0] AS anchor_type,
@@ -30,7 +32,7 @@ def vector_and_subgraph_search(
         collect({
             relationship: type(r),
             is_outgoing: startNode(r) = node,
-            target_id: neighbor.id,
+            target_id: elementId(neighbor),
             target_name: coalesce(neighbor.name, neighbor.title, ''),
             target_desc: coalesce(neighbor.description, neighbor.summary, ''),
             target_type: [label IN labels(neighbor) WHERE label <> 'Entity'][0]

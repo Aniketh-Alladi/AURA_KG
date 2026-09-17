@@ -35,21 +35,17 @@ def fetch_unembedded_nodes(session) -> List[Dict[str, Any]]:
     """
     Queries Neo4j for nodes labeled :Entity that do not have an embedding set.
     """
+    # Domain nodes use per-label primary keys (person_id, project_id, ...), not a
+    # generic `id` property, so elementId() is used as the stable node reference.
     cypher = """
     MATCH (n:Entity)
     WHERE n.embedding IS NULL
-    RETURN 
-        n.id AS id, 
-        coalesce(n.name, n.title, '') AS identifier, 
+    RETURN
+        elementId(n) AS id,
+        coalesce(n.name, n.title, '') AS identifier,
         coalesce(n.description, n.summary, '') AS details,
-    labels(n) AS node_type
+        labels(n) AS node_type
     """
-    """
-    // TODO: Write Cypher query to MATCH nodes labeled :Entity
-    // TODO: Filter WHERE n.embedding IS NULL
-    // TODO: RETURN node properties (id, name, description, title, etc.)
-    """
-    # TODO: Run query in session and return a list of dictionary objects
     result = session.run(cypher)
 
     return [record.data() for record in result]
@@ -60,14 +56,9 @@ def save_node_embedding(session, node_id: str, embedding: List[float]) -> None:
     Updates a single node in Neo4j with its generated embedding vector.
     """
     cypher = """
-    MATCH (n:Entity {id: $node_id})
+    MATCH (n:Entity) WHERE elementId(n) = $node_id
     SET n.embedding = $embedding
     """
-    """
-    // TODO: Write Cypher query to MATCH node by ID
-    // TODO: SET n.embedding = $embedding
-    """
-    # TODO: Run the write query using session.run()
     session.execute_write(lambda tx: tx.run(cypher, node_id=node_id, embedding=embedding))
 
 
