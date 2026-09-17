@@ -19,7 +19,7 @@ class APIHandler:
     
     def __init__(self):
         """Initialize API handler with endpoints from environment"""
-        self.retrieval_url = os.getenv('RETRIEVAL_API_URL', 'http://localhost:8000/api/retrieve')
+        self.retrieval_url = os.getenv('RETRIEVAL_API_URL', 'http://localhost:8000/api/v1/query')
         self.graph_url = os.getenv('GRAPH_API_URL', 'http://localhost:8000/api/graph')
         self.neo4j_uri = os.getenv('NEO4J_URI', 'bolt://localhost:7687')
         self.neo4j_user = os.getenv('NEO4J_USER', 'neo4j')
@@ -34,10 +34,8 @@ class APIHandler:
             Dict with connection status
         """
         try:
-            response = requests.get(
-                self.retrieval_url.replace('/api/retrieve', '/health'),
-                timeout=5
-            )
+            health_url = self.retrieval_url.rsplit('/api/', 1)[0] + '/health'
+            response = requests.get(health_url, timeout=5)
             if response.status_code == 200:
                 return {"status": "connected", "message": "API is reachable"}
             else:

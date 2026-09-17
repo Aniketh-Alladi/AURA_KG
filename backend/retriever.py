@@ -51,6 +51,7 @@ def format_subgraph_context(results: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
     context_lines = []
     supporting_nodes_map = {}
+    edges_map = {}
 
     for record in results:
         anchor_id = record.get("anchor_id")
@@ -92,6 +93,17 @@ def format_subgraph_context(results: List[Dict[str, Any]]) -> Dict[str, Any]:
                     }
                 line += f"\n  - [{rel}] -> {target_name} ({target_type}): {target_desc}"
 
+                # Track edge for frontend graph visualization, respecting original direction
+                is_outgoing = conn.get("is_outgoing", True)
+                source_id, dest_id = (anchor_id, target_id) if is_outgoing else (target_id, anchor_id)
+                edge_key = (source_id, dest_id, rel)
+                if edge_key not in edges_map:
+                    edges_map[edge_key] = {
+                        "source": source_id,
+                        "target": dest_id,
+                        "relation": rel
+                    }
+
         if not has_connections:
             line += "\n  - None"
 
@@ -99,10 +111,12 @@ def format_subgraph_context(results: List[Dict[str, Any]]) -> Dict[str, Any]:
 
     formatted_text = "\n\n".join(context_lines)
     supporting_nodes = list(supporting_nodes_map.values())
+    edges = list(edges_map.values())
 
     return {
         "text_context": formatted_text,
-        "supporting_nodes": supporting_nodes
+        "supporting_nodes": supporting_nodes,
+        "edges": edges
     }
 
 
