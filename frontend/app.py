@@ -42,8 +42,8 @@ if 'query_text' not in st.session_state:
 
 # Initialize API handler
 if 'api_handler' not in st.session_state:
-    # Use mock mode for testing, set to False when backend is ready
-    st.session_state.api_handler = get_api_handler(use_mock=True)
+    # Talk to the real retrieval API; individual queries fall back to mock data on failure.
+    st.session_state.api_handler = get_api_handler(use_mock=False)
 
 # Sidebar
 with st.sidebar:

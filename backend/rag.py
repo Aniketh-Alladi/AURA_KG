@@ -61,6 +61,7 @@ def answer_query(query: str, top_k: int = 3) -> Dict[str, Any]:
     retrieval_output = retrieve_context(query=query, top_k=top_k)
     text_context = retrieval_output.get("text_context", "")
     supporting_nodes = retrieval_output.get("supporting_nodes", [])
+    edges = retrieval_output.get("edges", [])
 
     # 2. Synthesize natural language answer with LLM
     answer_text = synthesize_answer(query=query, text_context=text_context)
@@ -69,7 +70,8 @@ def answer_query(query: str, top_k: int = 3) -> Dict[str, Any]:
     return {
         "query": query,
         "answer": answer_text,
-        "supporting_nodes": supporting_nodes
+        "supporting_nodes": supporting_nodes,
+        "edges": edges
     }
 
 

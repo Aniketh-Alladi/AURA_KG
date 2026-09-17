@@ -14,7 +14,14 @@ class SupportingNode(BaseModel):
     relevance: str = Field(..., description="Role in context ('primary_match' or 'connected_context').")
 
 
+class Edge(BaseModel):
+    source: str = Field(..., description="ID of the source node.")
+    target: str = Field(..., description="ID of the target node.")
+    relation: str = Field(..., description="Relationship type connecting the two nodes.")
+
+
 class QueryResponse(BaseModel):
     query: str
     answer: str
     supporting_nodes: List[SupportingNode]
+    edges: List[Edge]
